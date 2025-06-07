@@ -66,7 +66,12 @@ if st.session_state.submit_quiz:
     # Output hasil akhir
     if skor <= 4:
         st.success("Selamat! Kamu cocok jadi Software Engineer")
-        st.write()
+        st.image("/workspaces/fun_project_1_REAPYTHON1BJRDH/assets/Software Engineer.jpg")
+        st.write(f"""
+                 Software Engineer adalah profesional yang merancang, membangun, menguji, dan memelihara sistem perangkat lunak.
+                 Mereka menggunakan prinsip-prinsip rekayasa perangkat lunak untuk mengembangkan aplikasi yang efisien, andal,
+                 dan skalabel, baik untuk kebutuhan bisnis, sistem internal, maupun layanan publik.
+                 """)
     elif skor <= 6:
         st.success("Selamat! Kamu cocok jadi Data Scientist!")
     else:

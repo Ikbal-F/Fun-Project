@@ -19,20 +19,25 @@ if "submit_quiz" not in st.session_state:
 # Tombol mulai quiz
 if st.button("Mulai Quiz"):
     st.session_state.mulai_quiz = True
-    st.session_state.submit_quiz = False  # reset jika user mulai ulang
+    st.session_state.submit_quiz = False 
 
 # Jika quiz dimulai, tampilkan pertanyaan
 if st.session_state.mulai_quiz:
     p1 = st.radio("1. Kamu paling suka belajar apa nih?", 
-                  ["Algoritma dan Pemrograman", "Statistika", "Ekonomi"], key="p1")
+                  ["Algoritma dan Pemrograman", "Statistika", "Ekonomi"], key="p1",
+                  index=None)
     p2 = st.radio("2. Software apa yang sering kamu gunakan?", 
-                  ["VS Code", "R", "E-Views"], key="p2")
+                  ["VS Code", "R", "E-Views"], key="p2", index=None)
     p3 = st.radio("3. Kalo lagi ada waktu luang, apa yang paling kamu suka lakukan?", 
-                  ["Belajar ngoding", "Menganalisis data", "Liatin grafik saham"], key="p3")
+                  ["Belajar ngoding", "Menganalisis data", "Liatin grafik saham"], key="p3",
+                  index=None)
 
     # Tombol submit
     if st.button("Submit"):
-        st.session_state.submit_quiz = True
+        if not (p1 and p2 and p3):
+            st.error("Semua pertanyaan harus dijawab!")
+        else:
+            st.session_state.submit_quiz = True
 
 # Jika sudah submit, hitung skor dan tampilkan hasil
 if st.session_state.submit_quiz:
@@ -65,3 +70,12 @@ if st.session_state.submit_quiz:
         st.success("Selamat! Kamu cocok jadi Data Scientist!")
     else:
         st.success("Selamat! Kamu cocok jadi Ekonom!")
+
+    # Reset quiz untuk memulai ulang
+    if st.button("Reset"):
+        st.session_state.mulai_quiz = False
+        st.session_state.submit_quiz = False
+        for key in ["p1", "p2", "p3"]:
+            if key in st.session_state:
+                del st.session_state[key]
+        st.rerun()

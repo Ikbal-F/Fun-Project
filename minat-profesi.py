@@ -10,7 +10,7 @@ Sebelum mulai quiz, baca petunjuknya dulu yuk!
 3. Get Ready..! Rekomendasi profesi Kamu akan muncul
 """)
 
-# Inisialisasi sesi agar quiz bisa dimulai dan disubmit
+# Inisialisasi session_state
 if "mulai_quiz" not in st.session_state:
     st.session_state.mulai_quiz = False
 if "submit_quiz" not in st.session_state:
@@ -19,71 +19,73 @@ if "submit_quiz" not in st.session_state:
 # Tombol mulai quiz
 if st.button("Mulai Quiz"):
     st.session_state.mulai_quiz = True
-    st.session_state.submit_quiz = False 
 
-# Jika quiz dimulai, tampilkan pertanyaan
+# Tampilkan form hanya jika quiz dimulai dan belum disubmit
 if st.session_state.mulai_quiz:
-    p1 = st.radio("1. Kamu paling suka belajar apa nih?", 
-                  ["Algoritma dan Pemrograman", "Statistika", "Ekonomi"], key="p1",
-                  index=None)
-    p2 = st.radio("2. Software apa yang sering kamu gunakan?", 
-                  ["VS Code", "R", "E-Views"], key="p2", index=None)
-    p3 = st.radio("3. Kalo lagi ada waktu luang, apa yang paling kamu suka lakukan?", 
-                  ["Belajar ngoding", "Menganalisis data", "Liatin grafik saham"], key="p3",
-                  index=None)
+    nama = st.text_input("Nama: ", disabled=st.session_state.submit_quiz)
+    with st.form("quiz_form"):
+        p1 = st.radio("1. Kamu paling suka belajar apa nih?",
+                      ["Algoritma dan Pemrograman", "Statistika", "Ekonomi"],
+                      index= None, disabled= st.session_state.submit_quiz)
+        p2 = st.radio("2. Software apa yang sering kamu gunakan?",
+                      ["VS Code", "R", "E-Views"], index= None,
+                      disabled= st.session_state.submit_quiz)
+        p3 = st.radio("3. Kalo lagi ada waktu luang, apa yang paling kamu suka lakukan?",
+                      ["Belajar ngoding", "Menganalisis data", "Liatin grafik saham"],
+                      index=None, disabled= st.session_state.submit_quiz)
+        submitted = st.form_submit_button("Submit")
 
-    # Tombol submit
-    if st.button("Submit"):
-        if not (p1 and p2 and p3):
+    if submitted:
+        if not (nama and p1 and p2 and p3):
             st.error("Semua pertanyaan harus dijawab!")
+            st.audio("assets/salah.mp3", format="audio/mpeg", autoplay=True, end_time=2,
+                     start_time=0.95)
         else:
             st.session_state.submit_quiz = True
+            st.rerun()
 
 # Jika sudah submit, hitung skor dan tampilkan hasil
 if st.session_state.submit_quiz:
     skor = 0
-    if st.session_state.p1 == "Algoritma dan Pemrograman":
-        skor += 1
-    elif st.session_state.p1 == "Statistika":
-        skor += 2
-    else:
-        skor += 3
+    mapping = {
+        "Algoritma dan Pemrograman": 1,
+        "Statistika": 2,
+        "Ekonomi": 3,
+        "VS Code": 1,
+        "R": 2,
+        "E-Views": 3,
+        "Belajar ngoding": 1,
+        "Menganalisis data": 2,
+        "Liatin grafik saham": 3
+    }
 
-    if st.session_state.p2 == "VS Code":
-        skor += 1
-    elif st.session_state.p2 == "R":
-        skor += 2
-    else:
-        skor += 3
+    skor += mapping[p1]
+    skor += mapping[p2]
+    skor += mapping[p3]
 
-    if st.session_state.p3 == "Belajar ngoding":
-        skor += 1
-    elif st.session_state.p3 == "Menganalisis data":
-        skor += 2
-    else:
-        skor += 3
-
-    # Output hasil akhir
     if skor <= 4:
-        st.success("Selamat! Kamu cocok jadi Software Engineer")
-        st.image("/workspaces/fun_project_1_REAPYTHON1BJRDH/assets/Software Engineer.jpg")
-        st.write(f"""
-                 Software Engineer adalah profesional yang merancang, membangun, menguji, dan memelihara sistem perangkat lunak.
-                 Mereka menggunakan prinsip-prinsip rekayasa perangkat lunak untuk mengembangkan aplikasi yang efisien, andal,
-                 dan skalabel, baik untuk kebutuhan bisnis, sistem internal, maupun layanan publik.
-                 """)
+        st.success(f"Selamat {nama}! Kamu cocok jadi Software Engineer")
+        st.image("assets/Software Engineer.jpg")
+        st.write("""
+        Software Engineer adalah profesional yang merancang, membangun, menguji, dan memelihara sistem perangkat lunak.
+        """)
     elif skor <= 6:
-        st.success("Selamat! Kamu cocok jadi Data Scientist!")
+        st.success(f"Selamat {nama}! Kamu cocok jadi Data Scientist")
+        st.image("assets/data scientist.jpeg")
+        st.write("""
+        Data Scientist adalah ahli yang menganalisis dan menginterpretasikan data kompleks untuk menemukan pola dan wawasan.
+        """)
     else:
-        st.success("Selamat! Kamu cocok jadi Ekonom!")
-    
-    # Tampilkan musik
+        st.success(f"Selamat {nama}! Kamu cocok jadi Ekonom")
+        st.image("assets/ekonom.png")
+        st.write("""
+        Ekonom mempelajari cara individu dan pemerintah mengambil keputusan dalam mengelola sumber daya yang terbatas.
+        """)
 
-    # Reset quiz untuk memulai ulang
+    st.audio("assets/jeng-jeng.mp3", format="audio/mpeg", autoplay=True, end_time=1)
+
+    # Reset quiz
     if st.button("Reset"):
-        st.session_state.mulai_quiz = False
-        st.session_state.submit_quiz = False
-        for key in ["p1", "p2", "p3"]:
-            if key in st.session_state:
-                del st.session_state[key]
+        for key in ["mulai_quiz","submit_quiz"]:
+            st.session_state.pop(key, None)
         st.rerun()

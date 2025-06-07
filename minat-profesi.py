@@ -65,11 +65,14 @@ if st.session_state.submit_quiz:
 
     # Output hasil akhir
     if skor <= 4:
-        st.success("Selamat! Kamu cocok jadi Software Engineer!")
+        st.success("Selamat! Kamu cocok jadi Software Engineer")
+        st.write()
     elif skor <= 6:
         st.success("Selamat! Kamu cocok jadi Data Scientist!")
     else:
         st.success("Selamat! Kamu cocok jadi Ekonom!")
+    
+    # Tampilkan musik
 
     # Reset quiz untuk memulai ulang
     if st.button("Reset"):

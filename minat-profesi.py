@@ -37,15 +37,16 @@ if st.session_state.mulai_quiz:
 
     if submitted:
         if not (nama and p1 and p2 and p3):
+            st.audio("assets/salah.mp3", format="audio/mpeg", autoplay=True, end_time=3,
+                     start_time=2.99)
             st.error("Semua pertanyaan harus dijawab!")
-            st.audio("assets/salah.mp3", format="audio/mpeg", autoplay=True, end_time=2,
-                     start_time=0.95)
         else:
             st.session_state.submit_quiz = True
             st.rerun()
 
 # Jika sudah submit, hitung skor dan tampilkan hasil
 if st.session_state.submit_quiz:
+    st.audio("assets/jeng-jeng.mp3", format="audio/mpeg", autoplay=True, end_time=1)
     skor = 0
     mapping = {
         "Algoritma dan Pemrograman": 1,
@@ -81,8 +82,6 @@ if st.session_state.submit_quiz:
         st.write("""
         Ekonom mempelajari cara individu dan pemerintah mengambil keputusan dalam mengelola sumber daya yang terbatas.
         """)
-
-    st.audio("assets/jeng-jeng.mp3", format="audio/mpeg", autoplay=True, end_time=1)
 
     # Reset quiz
     if st.button("Reset"):

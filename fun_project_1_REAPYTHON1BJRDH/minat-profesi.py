@@ -28,8 +28,7 @@ if st.session_state.mulai_quiz:
                       ["Algoritma dan Pemrograman", "Statistika", "Ekonomi"],
                       index= None, disabled= st.session_state.submit_quiz)
         p2 = st.radio("2. Software apa yang sering kamu gunakan?",
-                      ["VS Code", "R", "E-Views"], index= None,
-                      disabled= st.session_state.submit_quiz)
+                      ["VS Code", "R", "E-Views"], index= None, disabled= st.session_state.submit_quiz)
         p3 = st.radio("3. Kalo lagi ada waktu luang, apa yang paling kamu suka lakukan?",
                       ["Belajar ngoding", "Menganalisis data", "Liatin grafik saham"],
                       index=None, disabled= st.session_state.submit_quiz)
